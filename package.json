@@ -1,0 +1,39 @@
+{
+  "name": "rank-front-estudo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "react-router dev",
+    "build": "react-router build",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-router/fs-routes": "7.18.1",
+    "@react-router/node": "7.18.1",
+    "@react-router/serve": "7.18.1",
+    "axios": "1.15.2",
+    "jwt-decode": "4.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router": "7.18.1",
+    "isbot": "^5"
+  },
+  "devDependencies": {
+    "@react-router/dev": "7.18.1",
+    "@types/node": "26.1.1",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.19",
+    "postcss": "8.4.38",
+    "tailwindcss": "3.4.3",
+    "typescript": "5.1.6",
+    "vite": "5.1.0",
+    "vite-tsconfig-paths": "4.2.1",
+    "vitest": "1.6.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

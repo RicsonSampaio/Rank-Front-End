@@ -1,0 +1,29 @@
+{
+  "include": ["app/**/*.ts", "app/**/*.tsx", "**/.react-router/types/**/*"],
+  "exclude": [".react-router/types/+routes.ts"],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["node", "@react-router/node", "vite/client"],
+    "rootDirs": [".", "./.react-router/types"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "paths": {
+      "@components/*": ["./app/client/components/*"],
+      "@layouts/*": ["./app/client/layouts/*"],
+      "@api/*": ["./app/server/api/*"],
+      "@common/*": ["./app/server/common/*"],
+      "@service/*": ["./app/server/service/*"],
+      "@pages/*": ["./app/client/pages/*"],
+      "@types-api/*": ["./app/interfaces/api/*"],
+      "@types-server/*": ["./app/interfaces/server/*"]
+    }
+  }
+}
