@@ -1,11 +1,13 @@
 import { useState, type PropsWithChildren } from "react";
 import { Form, Link, useLocation } from "react-router";
-import { HomeIcon, PeopleIcon, SettingsIcon } from "@components/NavigationIcons";
+import { HomeIcon, PeopleIcon, OrganizationIcon, SettingsIcon } from "@components/NavigationIcons";
 
-export function AppLayout({ children }: PropsWithChildren) {
+export function AppLayout({ children, admin = false }: PropsWithChildren<{ admin?: boolean }>) {
   const { pathname } = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const peopleActive = pathname === "/people";
+  const organizationsActive = pathname === "/organizations";
+  const settingsActive = peopleActive || organizationsActive;
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -22,7 +24,7 @@ export function AppLayout({ children }: PropsWithChildren) {
           </Link>
         </nav>
 
-        <div
+        {admin && (<div
           className="relative mt-auto w-full"
           onMouseEnter={() => setSettingsOpen(true)}
           onMouseLeave={() => setSettingsOpen(false)}
@@ -36,7 +38,7 @@ export function AppLayout({ children }: PropsWithChildren) {
             aria-controls="settings-menu"
             aria-expanded={settingsOpen}
             onClick={() => setSettingsOpen(true)}
-            className={"flex h-12 w-full items-center justify-center border-l-2 " + (peopleActive ? "border-yellow-400 bg-gray-800 text-white" : "border-transparent text-gray-600 hover:bg-gray-300")}
+            className={"flex h-12 w-full items-center justify-center border-l-2 " + (settingsActive ? "border-yellow-400 bg-gray-800 text-white" : "border-transparent text-gray-600 hover:bg-gray-300")}
           >
             <SettingsIcon className="h-5 w-5" />
           </button>
@@ -53,11 +55,20 @@ export function AppLayout({ children }: PropsWithChildren) {
                   <PeopleIcon className="h-5 w-5" />
                   Pessoas
                 </Link>
+                <Link
+                  to="/organizations"
+                  onClick={() => setSettingsOpen(false)}
+                  aria-current={organizationsActive ? "page" : undefined}
+                  className={"flex items-center gap-2 rounded px-2 py-2 text-sm " + (organizationsActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-100")}
+                >
+                  <OrganizationIcon className="h-5 w-5" />
+                  Organização
+                </Link>
               </nav>
             </div>
           )}
-        </div>
-        <Form action="/logout" method="post" className="mt-2 w-full border-t border-gray-300 pt-2 text-center">
+        </div>)}
+        <Form action="/logout" method="post" className={(admin ? "mt-2" : "mt-auto") + " w-full border-t border-gray-300 pt-2 text-center"}>
           <button type="submit" className="w-full py-2 text-xs text-gray-700 hover:bg-gray-300">Sair</button>
         </Form>
       </aside>

@@ -9,7 +9,7 @@ function registerRequest() {
     body: new URLSearchParams({
       name: "Maria",
       email: "maria@example.test",
-      password: "senha12345",
+      password: "1",
     }),
   });
 }
@@ -26,7 +26,7 @@ describe("cadastro", () => {
     delete process.env.SESSION_SECRET;
   });
 
-  it("envia os dados ao endpoint real e volta ao login após sucesso", async () => {
+  it("envia uma senha de um caractere à API e volta ao login após sucesso", async () => {
     const post = vi.spyOn(axios, "post").mockResolvedValue({
       data: { id: 42, name: "Maria", email: "maria@example.test", isActive: true },
     });
@@ -34,7 +34,7 @@ describe("cadastro", () => {
     const response = await register({ request: registerRequest() } as Parameters<typeof register>[0]);
 
     expect(post).toHaveBeenCalledWith("http://localhost:5100/api/users", {
-      name: "Maria", email: "maria@example.test", password: "senha12345",
+      name: "Maria", email: "maria@example.test", password: "1",
     }, {});
     expect(response).toBeInstanceOf(Response);
     expect((response as Response).status).toBe(302);

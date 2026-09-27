@@ -49,6 +49,8 @@ export class SessionService {
     service.session.set("name", name);
     service.session.set("email", payload.email ?? "");
     service.session.set("expirationDate", expirationDate);
+    service.session.set("admin", payload.admin === true ||
+      (typeof payload.admin === "string" && payload.admin.toLowerCase() === "true"));
     return service;
   }
 
@@ -56,6 +58,10 @@ export class SessionService {
     const expirationDate = this.session.get("expirationDate");
     return Boolean(this.session.get("token") && this.session.get("userId") &&
       expirationDate && Date.now() < new Date(expirationDate).getTime());
+  }
+
+  isAdmin() {
+    return this.session.get("admin") === true;
   }
 
   getToken() {

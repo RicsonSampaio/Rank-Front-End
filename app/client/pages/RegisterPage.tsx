@@ -20,7 +20,7 @@ export function RegisterPage() {
         </label>
         <label className="flex flex-col gap-1">
           Senha
-          <input className="rounded border p-2" type="password" name="password" autoComplete="new-password" minLength={8} required />
+          <input className="rounded border p-2" type="password" name="password" autoComplete="new-password" required />
         </label>
         {result?.error && <p role="alert" className="text-red-700">{result.error}</p>}
         <button className="rounded bg-blue-700 p-2 text-white disabled:opacity-50" disabled={submitting} type="submit">

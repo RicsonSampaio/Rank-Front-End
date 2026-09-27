@@ -22,11 +22,11 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!email || email.length > 320) {
     return data({ error: "Informe um email válido.", values }, { status: 400 });
   }
-  if (password.length < 8) {
-    return data({ error: "A senha deve ter ao menos 8 caracteres.", values }, { status: 400 });
+  if (!password) {
+    return data({ error: "Informe uma senha.", values }, { status: 400 });
   }
 
-  const result = await UserService.register({ name, email, password });
+  const result = await UserService.register({ name, email, password, admin: false });
   if (!result.success) {
     return data({ error: result.message, values }, { status: result.status });
   }

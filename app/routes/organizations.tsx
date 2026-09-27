@@ -1,25 +1,25 @@
 import { data, redirect } from "react-router";
-import type { Route } from "./+types/people";
-import { PeoplePage } from "@pages/PeoplePage";
+import type { Route } from "./+types/organizations";
+import { OrganizationsPage } from "@pages/OrganizationsPage";
 import { SessionService } from "@service/SessionService.server";
-import { UserService } from "@service/UserService.server";
+import { OrganizationService } from "@service/OrganizationService.server";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await SessionService.use(request.headers.get("Cookie") ?? "");
   if (!session.isValid()) return redirect("/login");
   if (!session.isAdmin()) return redirect("/home");
 
-  const result = await UserService.list(session.getToken());
+  const result = await OrganizationService.list(session.getToken());
   if (!result.success) {
     if (result.status === 401) {
       return redirect("/login", {
         headers: { "Set-Cookie": await session.destroy() },
       });
     }
-    return { users: [], error: result.message, admin: true };
+    return { organizations: [], error: result.message, admin: true };
   }
 
-  return { users: result.users, error: null, admin: true };
+  return { organizations: result.organizations, error: null, admin: true };
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -34,41 +34,35 @@ export async function action({ request }: Route.ActionArgs) {
   const fail = (message: string, status = 400) =>
     data({ success: false, message, requestId }, { status });
 
-  if (!Number.isSafeInteger(id) || id <= 0) return fail("Pessoa inválida.");
+  if (!Number.isSafeInteger(id) || id <= 0) return fail("Organização inválida.");
   if (intent !== "update" && intent !== "delete") return fail("Ação inválida.");
 
   if (intent === "update") {
-    const name = String(form.get("name") ?? "").trim();
-    const email = String(form.get("email") ?? "").trim();
-    const password = String(form.get("password") ?? "");
-    if (name.length < 2 || name.length > 150) return fail("O nome deve ter entre 2 e 150 caracteres.");
-    if (!email || email.length > 320) return fail("Informe um email válido.");
+    const nome = String(form.get("nome") ?? "").trim();
+    const logo = String(form.get("logo") ?? "").trim();
+    if (!nome || nome.length > 150) return fail("O nome deve ter entre 1 e 150 caracteres.");
+    if (logo.length > 2048) return fail("O logo deve ter no máximo 2048 caracteres.");
 
-    const result = await UserService.update(id, {
-      name,
-      email,
-      ...(password !== "" ? { password } : {}),
-    }, session.getToken());
-
+    const result = await OrganizationService.update(id, { nome, logo: logo || null }, session.getToken());
     if (!result.success) {
       if (result.status === 401) {
         return redirect("/login", { headers: { "Set-Cookie": await session.destroy() } });
       }
       return fail(result.message, result.status);
     }
-    return data({ success: true, message: "Pessoa atualizada com sucesso.", requestId });
+    return data({ success: true, message: "Organização atualizada com sucesso.", requestId });
   }
 
-  const result = await UserService.delete(id, session.getToken());
+  const result = await OrganizationService.delete(id, session.getToken());
   if (!result.success) {
     if (result.status === 401) {
       return redirect("/login", { headers: { "Set-Cookie": await session.destroy() } });
     }
     return fail(result.message, result.status);
   }
-  return data({ success: true, message: "Pessoa excluída com sucesso.", requestId });
+  return data({ success: true, message: "Organização excluída com sucesso.", requestId });
 }
 
 export default function Page({ loaderData }: Route.ComponentProps) {
-  return <PeoplePage users={loaderData.users} error={loaderData.error} admin={loaderData.admin} />;
+  return <OrganizationsPage organizations={loaderData.organizations} error={loaderData.error} admin={loaderData.admin} />;
 }

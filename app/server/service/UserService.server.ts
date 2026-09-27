@@ -1,6 +1,6 @@
 import { UserApi } from "@api/UserApi.server";
 import { getApiError } from "@common/apiError.server";
-import type { CreateUserPayload } from "@types-api/User";
+import type { CreateUserPayload, UpdateUserPayload } from "@types-api/User";
 
 export class UserService {
   static async register(payload: CreateUserPayload) {
@@ -22,6 +22,24 @@ export class UserService {
         success: false as const,
         ...getApiError(error, "Não foi possível carregar as pessoas. Tente novamente."),
       };
+    }
+  }
+
+  static async update(id: number, payload: UpdateUserPayload, token: string) {
+    try {
+      await UserApi.update(id, payload, token);
+      return { success: true as const };
+    } catch (error) {
+      return { success: false as const, ...getApiError(error, "Não foi possível salvar a pessoa. Tente novamente.") };
+    }
+  }
+
+  static async delete(id: number, token: string) {
+    try {
+      await UserApi.delete(id, token);
+      return { success: true as const };
+    } catch (error) {
+      return { success: false as const, ...getApiError(error, "Não foi possível excluir a pessoa. Tente novamente.") };
     }
   }
 }

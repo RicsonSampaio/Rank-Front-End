@@ -4,6 +4,7 @@ export interface SessionData {
   name: string;
   email: string;
   expirationDate: string;
+  admin: boolean;
 }
 
 export interface TokenPayloadData {
@@ -11,4 +12,5 @@ export interface TokenPayloadData {
   name?: string;
   email?: string;
   exp?: number;
+  admin?: boolean | string;
 }
