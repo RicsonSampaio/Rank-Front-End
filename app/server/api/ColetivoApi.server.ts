@@ -12,6 +12,7 @@ export class ColetivoApi {
     });
     return response.data;
   }
+
   static async list(token: string): Promise<ColetivoResponse[]> {
     const { API_URL } = getEnv();
     const response = await axios.get<ColetivoResponse[]>(API_URL + "/api/Coletivo", {

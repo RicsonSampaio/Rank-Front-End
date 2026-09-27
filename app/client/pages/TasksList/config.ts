@@ -1,0 +1,26 @@
+import type { TaskColumn } from "@types-client/pages/TasksList";
+
+export const BASE_COLUMNS: TaskColumn[] = [
+  { id: "id", label: "ID", width: 80, type: "identifier" },
+  { id: "titulo", label: "Título", width: 352, type: "text" },
+  { id: "idStatus", label: "Status (ID)", width: 120, type: "identifier" },
+  { id: "idCategoria", label: "Categoria (ID)", width: 140, type: "identifier" },
+  { id: "idResponsavel", label: "Responsável (ID)", width: 160, type: "identifier" },
+  { id: "prazoInicial", label: "Data inicial", width: 140, type: "date" },
+  { id: "prazoFinal", label: "Data final", width: 140, type: "date" },
+  { id: "idRelevancia", label: "Relevância", width: 120, type: "number" },
+  { id: "privada", label: "Visibilidade", width: 140, type: "visibility" },
+  { id: "descricao", label: "Descrição", width: 300, type: "text" },
+  { id: "idUsuarioCriacao", label: "Criador (ID)", width: 140, type: "identifier" },
+  { id: "dataCriacao", label: "Criada em", width: 140, type: "date" },
+  { id: "dataAtualizacao", label: "Atualizada em", width: 140, type: "date" },
+  { id: "lastDoneDate", label: "Concluída em", width: 140, type: "date" },
+  { id: "userListParticipantes", label: "Participantes", width: 180, type: "text" },
+  { id: "userListMarcados", label: "Usuários marcados", width: 180, type: "text" },
+  { id: "idTarefaPai", label: "Tarefa pai (ID)", width: 140, type: "identifier" },
+  { id: "idDocumento", label: "Documento (ID)", width: 160, type: "identifier" },
+  { id: "idFase", label: "Fase (ID)", width: 120, type: "identifier" },
+  { id: "idColetivo", label: "Coletivo (ID)", width: 140, type: "identifier" },
+  { id: "idEspaco", label: "Espaço (ID)", width: 140, type: "identifier" },
+  { id: "idEscopo", label: "Escopo (ID)", width: 140, type: "identifier" },
+];

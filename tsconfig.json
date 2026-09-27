@@ -16,6 +16,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "paths": {
+      "@types-client/*": ["./app/interfaces/client/*"],
       "@components/*": ["./app/client/components/*"],
       "@layouts/*": ["./app/client/layouts/*"],
       "@api/*": ["./app/server/api/*"],

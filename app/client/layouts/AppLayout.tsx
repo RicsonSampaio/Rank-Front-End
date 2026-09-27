@@ -1,8 +1,8 @@
 import { useState, type PropsWithChildren } from "react";
 import { Form, Link, useLocation } from "react-router";
-import { HomeIcon, PeopleIcon, OrganizationIcon, SettingsIcon } from "@components/NavigationIcons";
+import { HomeIcon, MemberIcon, PeopleIcon, OrganizationIcon, SettingsIcon } from "@components/NavigationIcons";
 
-export function AppLayout({ children, admin = false }: PropsWithChildren<{ admin?: boolean }>) {
+export function AppLayout({ children, admin = false, idColetivo }: PropsWithChildren<{ admin?: boolean; idColetivo?: number }>) {
   const { pathname } = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const peopleActive = pathname === "/people";
@@ -22,6 +22,17 @@ export function AppLayout({ children, admin = false }: PropsWithChildren<{ admin
             <HomeIcon className="h-5 w-5" />
             <span>Início</span>
           </Link>
+          {idColetivo !== undefined && (
+            <Link
+              to={"/" + idColetivo + "/Members/List"}
+              aria-label="Membros do coletivo"
+              aria-current={pathname === "/" + idColetivo + "/Members/List" ? "page" : undefined}
+              className={"flex h-12 w-full flex-col items-center justify-center gap-0.5 border-l-2 text-[10px] " + (pathname === "/" + idColetivo + "/Members/List" ? "border-yellow-400 bg-gray-800 text-white" : "border-transparent text-gray-600 hover:bg-gray-300")}
+            >
+              <MemberIcon className="h-5 w-5" />
+              <span>Membros</span>
+            </Link>
+          )}
         </nav>
 
         {admin && (<div

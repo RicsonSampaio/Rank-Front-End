@@ -68,6 +68,10 @@ export class SessionService {
     return this.session.get("token") ?? "";
   }
 
+  getUserId() {
+    return this.session.get("userId") ?? "";
+  }
+
   getName() {
     return this.session.get("name") ?? "";
   }

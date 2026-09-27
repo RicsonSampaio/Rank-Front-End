@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFetcher } from "react-router";
 import { RecordModal } from "@components/RecordModal";
-import type { action } from "../../../routes/home";
+import type { action } from "../../../../routes/home";
 
 interface ColetivoCreateModalProps {
   requestId: string;
