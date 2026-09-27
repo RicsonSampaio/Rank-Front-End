@@ -1,10 +1,18 @@
-import { useState, type PropsWithChildren } from "react";
+import { useCallback, useState, type PropsWithChildren } from "react";
 import { Form, Link, useLocation } from "react-router";
-import { HomeIcon, MemberIcon, PeopleIcon, OrganizationIcon, SettingsIcon } from "@components/NavigationIcons";
+import { HomeIcon, PencilIcon, MemberIcon, PeopleIcon, OrganizationIcon, SettingsIcon } from "@components/NavigationIcons";
+
+import { ColetivoEditModal } from "@components/ColetivoEditModal";
 
 export function AppLayout({ children, admin = false, idColetivo }: PropsWithChildren<{ admin?: boolean; idColetivo?: number }>) {
   const { pathname } = useLocation();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [coletivoEditor, setColetivoEditor] = useState<string | null>(null);
+  const [coletivoMessage, setColetivoMessage] = useState<string | null>(null);
+  const onColetivoUpdated = useCallback((message: string) => {
+    setColetivoEditor(null);
+    setColetivoMessage(message);
+  }, []);
   const peopleActive = pathname === "/people";
   const organizationsActive = pathname === "/organizations";
   const settingsActive = peopleActive || organizationsActive;
@@ -35,8 +43,25 @@ export function AppLayout({ children, admin = false, idColetivo }: PropsWithChil
           )}
         </nav>
 
+        <div className="mt-auto w-full">
+          {idColetivo !== undefined && (
+            <button
+              type="button"
+              aria-label="Editar coletivo"
+              title="Editar coletivo"
+              aria-haspopup="dialog"
+              onClick={() => {
+                setSettingsOpen(false);
+                setColetivoMessage(null);
+                setColetivoEditor(crypto.randomUUID());
+              }}
+              className={"flex h-12 w-full items-center justify-center border-l-2 " + (coletivoEditor ? "border-yellow-400 bg-gray-800 text-white" : "border-transparent text-gray-600 hover:bg-gray-300")}
+            >
+              <PencilIcon className="h-5 w-5" />
+            </button>
+          )}
         {admin && (<div
-          className="relative mt-auto w-full"
+          className="relative w-full"
           onMouseEnter={() => setSettingsOpen(true)}
           onMouseLeave={() => setSettingsOpen(false)}
           onKeyDown={(event) => {
@@ -79,13 +104,26 @@ export function AppLayout({ children, admin = false, idColetivo }: PropsWithChil
             </div>
           )}
         </div>)}
-        <Form action="/logout" method="post" className={(admin ? "mt-2" : "mt-auto") + " w-full border-t border-gray-300 pt-2 text-center"}>
+        </div>
+        <Form action="/logout" method="post" className="mt-2 w-full border-t border-gray-300 pt-2 text-center">
           <button type="submit" className="w-full py-2 text-xs text-gray-700 hover:bg-gray-300">Sair</button>
         </Form>
       </aside>
       <main className="pl-14">
-        <div className="p-6">{children}</div>
+        <div className="p-6">
+          {idColetivo !== undefined && coletivoMessage && <p role="status" className="mb-4 rounded border border-green-200 bg-green-50 p-3 text-sm text-green-800">{coletivoMessage}</p>}
+          {children}
+        </div>
       </main>
+      {idColetivo !== undefined && coletivoEditor && (
+        <ColetivoEditModal
+          key={idColetivo + ":" + coletivoEditor}
+          idColetivo={idColetivo}
+          requestId={coletivoEditor}
+          onClose={() => setColetivoEditor(null)}
+          onUpdated={onColetivoUpdated}
+        />
+      )}
     </div>
   );
 }

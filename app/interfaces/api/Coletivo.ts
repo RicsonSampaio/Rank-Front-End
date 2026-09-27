@@ -13,3 +13,4 @@ export interface CreateColetivoPayload {
   idTipoColetivo: number;
   logo: string | null;
 }
+export type UpdateColetivoPayload = CreateColetivoPayload;
