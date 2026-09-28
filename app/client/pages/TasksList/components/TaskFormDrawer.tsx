@@ -15,7 +15,7 @@ interface TaskFormDrawerProps {
 }
 
 const inputClass = "mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100";
-const primaryClass = "rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50";
+const primaryClass = "rank-btn rank-btn-primary";
 
 function emptyTask(idColetivo: number): TarefaPayload {
   return {
@@ -152,7 +152,7 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, requestId, onClose, o
             </fieldset>
           </div>
           <footer className="flex shrink-0 justify-end gap-3 border-t border-gray-200 px-6 py-4">
-            <button type="button" disabled={busy} onClick={onClose} className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50 disabled:opacity-50">Cancelar</button>
+            <button type="button" disabled={busy} onClick={onClose} className="rank-btn rank-btn-cancel">Cancelar</button>
             <button type="submit" disabled={busy} className={primaryClass}>
               {busy ? "Salvando..." : mode === "create" ? "Criar" : "Atualizar"}
             </button>

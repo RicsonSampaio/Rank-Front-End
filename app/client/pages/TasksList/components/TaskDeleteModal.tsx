@@ -32,8 +32,8 @@ export function TaskDeleteModal({ task, idColetivo, requestId, onClose, onSucces
         <p className="mb-5 text-gray-700">Deseja excluir a tarefa “{task.titulo}”? Essa ação não pode ser desfeita.</p>
         {response && !response.success && <p role="alert" className="mb-5 rounded bg-red-50 p-3 text-sm text-red-700">{response.message}</p>}
         <div className="flex justify-end gap-3">
-          <button type="button" disabled={busy} onClick={onClose} className="rounded border border-gray-300 px-4 py-2 text-sm disabled:opacity-50">Cancelar</button>
-          <button type="submit" disabled={busy} className="rounded bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50">{busy ? "Excluindo..." : "Excluir"}</button>
+          <button type="button" disabled={busy} onClick={onClose} className="rank-btn rank-btn-cancel">Cancelar</button>
+          <button type="submit" disabled={busy} className="rank-btn rank-btn-danger">{busy ? "Excluindo..." : "Excluir"}</button>
         </div>
       </fetcher.Form>
     </RecordModal>

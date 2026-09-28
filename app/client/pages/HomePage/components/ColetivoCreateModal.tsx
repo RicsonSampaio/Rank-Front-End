@@ -48,8 +48,8 @@ export function ColetivoCreateModal({ requestId, onClose, onCreated }: ColetivoC
         </label>
         {feedback && !feedback.success && <p role="alert" className="text-red-700">{feedback.message}</p>}
         <div className="mt-2 flex justify-end gap-2">
-          <button type="button" onClick={onClose} disabled={busy} className="rounded border px-4 py-2 disabled:opacity-50">Cancelar</button>
-          <button type="submit" disabled={busy} className="rounded bg-blue-700 px-4 py-2 text-white disabled:opacity-50">
+          <button type="button" onClick={onClose} disabled={busy} className="rank-btn rank-btn-cancel">Cancelar</button>
+          <button type="submit" disabled={busy} className="rank-btn rank-btn-primary">
             {busy ? "Salvando..." : "Salvar"}
           </button>
         </div>

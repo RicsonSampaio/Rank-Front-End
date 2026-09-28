@@ -50,7 +50,7 @@ export function RecordMenu({ label, onEdit, onDelete }: RecordMenuProps) {
         aria-haspopup="menu"
         aria-expanded={position !== null}
         aria-controls={position ? menuId : undefined}
-        className="rounded p-1.5 text-gray-600 hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
+        className="rank-icon-action p-1.5"
         onClick={() => {
           if (position) { setPosition(null); return; }
           const rect = buttonRef.current?.getBoundingClientRect();
@@ -91,8 +91,8 @@ export function RecordMenu({ label, onEdit, onDelete }: RecordMenuProps) {
             }
           }}
         >
-          <button type="button" role="menuitem" className="w-full rounded px-3 py-2 text-left text-sm hover:bg-gray-100 focus:bg-gray-100" onClick={() => select(onEdit)}>Editar</button>
-          <button type="button" role="menuitem" className="w-full rounded px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 focus:bg-red-50" onClick={() => select(onDelete)}>Excluir</button>
+          <button type="button" role="menuitem" className="w-full rounded px-3 py-2 text-left text-sm text-amber-800 hover:bg-amber-50 focus:bg-amber-50" onClick={() => select(onEdit)}>Editar</button>
+          <button type="button" role="menuitem" className="w-full rounded px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50 focus:bg-red-50" onClick={() => select(onDelete)}>Excluir</button>
         </div>, document.body,
       )}
     </>

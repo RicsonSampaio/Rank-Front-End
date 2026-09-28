@@ -45,7 +45,7 @@ export function HomePage({ coletivos, error, admin }: HomePageProps) {
               setMessage("");
               setCreateRequestId(crypto.randomUUID());
             }}
-            className="flex items-center justify-center gap-2 whitespace-nowrap rounded bg-blue-700 px-4 py-2 text-white hover:bg-blue-800"
+            className="rank-btn rank-btn-primary"
           >
             <PlusIcon className="h-5 w-5" />
             Criar coletivo

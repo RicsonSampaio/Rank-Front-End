@@ -51,7 +51,7 @@ export function MemberFormDrawer({ mode, memberId, idColetivo, requestId, onClos
           {detail.state === "idle" && detail.data?.error ? (
             <div role="alert" className="space-y-4 text-red-700">
               <p>{detail.data.error}</p>
-              <button type="button" onClick={() => void detail.load(detailUrl)} className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">Tentar novamente</button>
+              <button type="button" onClick={() => void detail.load(detailUrl)} className="rank-btn rank-btn-primary">Tentar novamente</button>
             </div>
           ) : <p role="status" className="text-gray-600">Carregando dados do membro...</p>}
         </div>
@@ -73,8 +73,8 @@ export function MemberFormDrawer({ mode, memberId, idColetivo, requestId, onClos
             </label>
           </div>
           <footer className="flex shrink-0 justify-end gap-3 border-t border-gray-200 px-6 py-4">
-            <button type="button" disabled={busy} onClick={onClose} className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50 disabled:opacity-50">Cancelar</button>
-            <button type="submit" disabled={busy} className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+            <button type="button" disabled={busy} onClick={onClose} className="rank-btn rank-btn-cancel">Cancelar</button>
+            <button type="submit" disabled={busy} className="rank-btn rank-btn-primary">
               {busy ? "Salvando..." : mode === "create" ? "Adicionar" : "Atualizar"}
             </button>
           </footer>

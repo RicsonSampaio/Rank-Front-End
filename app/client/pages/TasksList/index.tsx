@@ -47,7 +47,7 @@ export function TasksListPage({ tarefas, idColetivo, error, admin }: TasksListPa
         </div>
         <button
           type="button"
-          className="flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rank-btn rank-btn-primary"
           onClick={() => {
             setMessage(null);
             setOperation({ mode: "create", requestId: crypto.randomUUID() });

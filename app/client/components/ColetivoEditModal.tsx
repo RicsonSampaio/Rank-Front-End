@@ -62,8 +62,8 @@ export function ColetivoEditModal({ idColetivo, requestId, onClose, onUpdated }:
           <div role="alert" className="space-y-4">
             <p className="text-red-700">{detail.data.error}</p>
             <div className="flex justify-end gap-2">
-              <button type="button" onClick={onClose} className="rounded border px-4 py-2">Cancelar</button>
-              <button type="button" onClick={() => void detail.load(url)} className="rounded bg-blue-700 px-4 py-2 text-white">Tentar novamente</button>
+              <button type="button" onClick={onClose} className="rank-btn rank-btn-cancel">Cancelar</button>
+              <button type="button" onClick={() => void detail.load(url)} className="rank-btn rank-btn-primary">Tentar novamente</button>
             </div>
           </div>
         ) : <p role="status" className="text-gray-600">Carregando dados do coletivo...</p>
@@ -93,12 +93,12 @@ export function ColetivoEditModal({ idColetivo, requestId, onClose, onUpdated }:
             </div>
           )}
           <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-            <button type="button" disabled={busy} onClick={remove} className="rounded bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700 disabled:opacity-50">
+            <button type="button" disabled={busy} onClick={remove} className="rank-btn rank-btn-danger">
               {busy && confirmDelete ? "Deletando..." : confirmDelete ? "Confirmar exclusão" : "Deletar"}
             </button>
             <div className="flex gap-2">
-              <button type="button" onClick={onClose} disabled={busy} className="rounded border px-3 py-2 text-sm disabled:opacity-50">Cancelar</button>
-              <button type="submit" disabled={busy || confirmDelete} className="rounded bg-blue-700 px-3 py-2 text-sm text-white disabled:opacity-50">
+              <button type="button" onClick={onClose} disabled={busy} className="rank-btn rank-btn-cancel">Cancelar</button>
+              <button type="submit" disabled={busy || confirmDelete} className="rank-btn rank-btn-primary">
                 {busy && !confirmDelete ? "Atualizando..." : "Atualizar"}
               </button>
             </div>

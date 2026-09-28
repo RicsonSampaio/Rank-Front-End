@@ -48,7 +48,7 @@ export function MembersListPage({ membros, idColetivo, error, admin }: MembersLi
           <h1 className="text-2xl font-semibold">Membros</h1>
           {!error && <p className="text-sm text-gray-500">{membros.length} {membros.length === 1 ? "membro" : "membros"}</p>}
         </div>
-        <button type="button" className="flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700" onClick={() => {
+        <button type="button" className="rank-btn rank-btn-primary" onClick={() => {
           setMessage(null);
           setOperation({ mode: "create", requestId: crypto.randomUUID() });
         }}>

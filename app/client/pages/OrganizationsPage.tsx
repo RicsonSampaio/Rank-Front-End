@@ -100,8 +100,8 @@ export function OrganizationsPage({ organizations, error, admin }: Organizations
             )}
             {feedback && !feedback.success && <p role="alert" className="text-red-700">{feedback.message}</p>}
             <div className="mt-2 flex justify-end gap-2">
-              <button type="button" onClick={() => setOperation(null)} disabled={busy} className="rounded border px-4 py-2 disabled:opacity-50">Cancelar</button>
-              <button type="submit" disabled={busy} className={"rounded px-4 py-2 text-white disabled:opacity-50 " + (operation.kind === "delete" ? "bg-red-600" : "bg-blue-700")}>
+              <button type="button" onClick={() => setOperation(null)} disabled={busy} className="rank-btn rank-btn-cancel">Cancelar</button>
+              <button type="submit" disabled={busy} className={"rank-btn " + (operation.kind === "delete" ? "rank-btn-danger" : "rank-btn-primary")}>
                 {busy ? "Aguarde..." : operation.kind === "delete" ? "Excluir" : "Salvar"}
               </button>
             </div>
