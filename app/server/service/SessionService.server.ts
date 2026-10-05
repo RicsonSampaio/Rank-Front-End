@@ -5,10 +5,10 @@ import {
 } from "react-router";
 import type { SessionData, TokenPayloadData } from "@types-server/Session";
 
-function getStorage() {
-  const secret = process.env.SESSION_SECRET;
-  if (!secret) throw new Error("SESSION_SECRET não configurada");
+// Projeto de estudo: segredo fixo só para assinar o cookie, sem precisar configurar nada
+const SESSION_SECRET = "rank-front-estudo";
 
+function getStorage() {
   return createCookieSessionStorage<SessionData>({
     cookie: {
       name: "__session",
@@ -16,7 +16,7 @@ function getStorage() {
       maxAge: 60 * 60 * 8,
       path: "/",
       sameSite: "lax",
-      secrets: [secret],
+      secrets: [SESSION_SECRET],
       secure: process.env.NODE_ENV === "production",
     },
   });

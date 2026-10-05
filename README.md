@@ -5,7 +5,7 @@ Projeto separado inspirado na arquitetura da ConstruCode: React Router em modo f
 ## Preparar
 
 1. Use Node 20 ou superior e execute `npm install` nesta pasta.
-2. Copie `.env.example` para `.env`. O `API_URL` padrão é `https://localhost:7199`, conforme o perfil HTTPS do backend Rank. Preencha `SESSION_SECRET` com um valor longo e aleatório. Não versione `.env`.
+2. Copie `.env.example` para `.env`. O `API_URL` padrão é `https://localhost:7199`, conforme o perfil HTTPS do backend Rank. Não versione `.env`.
 3. Inicie a API Rank e execute `npm run dev` no front. Abra `http://localhost:3300`.
 
 O backend local examinado em `C:\RankProjectDotNet\Rank\RankProject` usa **.NET 8**. Este front chama a API diretamente pelo servidor do React Router; não precisa da aplicação .NET antiga.

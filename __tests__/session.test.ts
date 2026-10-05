@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { SessionService } from "../app/server/service/SessionService.server";
 
 function tokenWithExpiry(exp: number) {
@@ -16,9 +16,6 @@ function tokenWithExpiry(exp: number) {
 }
 
 describe("SessionService", () => {
-  beforeEach(() => { process.env.SESSION_SECRET = "segredo-de-teste-longo-e-estavel"; });
-  afterEach(() => { delete process.env.SESSION_SECRET; });
-
   it("recupera o usuário de um cookie válido", async () => {
     const token = tokenWithExpiry(Math.floor(Date.now() / 1000) + 60);
     const session = await SessionService.fromToken(token);

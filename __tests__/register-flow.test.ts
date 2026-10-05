@@ -17,13 +17,11 @@ function registerRequest() {
 describe("cadastro", () => {
   beforeEach(() => {
     process.env.API_URL = "http://localhost:5100";
-    process.env.SESSION_SECRET = "segredo-de-teste-longo-e-estavel";
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
     delete process.env.API_URL;
-    delete process.env.SESSION_SECRET;
   });
 
   it("envia uma senha de um caractere à API e volta ao login após sucesso", async () => {

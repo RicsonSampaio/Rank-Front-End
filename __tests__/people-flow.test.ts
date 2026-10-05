@@ -22,13 +22,11 @@ async function authenticatedRequest() {
 describe("listagem de pessoas", () => {
   beforeEach(() => {
     process.env.API_URL = "http://localhost:5100";
-    process.env.SESSION_SECRET = "segredo-de-teste-longo-e-estavel";
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
     delete process.env.API_URL;
-    delete process.env.SESSION_SECRET;
   });
 
   it("exige login antes de buscar usuários", async () => {

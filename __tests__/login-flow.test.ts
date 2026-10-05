@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { AuthenticationApi } from "../app/server/api/AuthenticationApi.server";
 import { action as login } from "../app/routes/login";
 import { loader as home } from "../app/routes/home";
@@ -13,10 +13,8 @@ function fakeToken() {
 }
 
 describe("fluxo local de login", () => {
-  beforeEach(() => { process.env.SESSION_SECRET = "segredo-de-teste-longo-e-estavel"; });
   afterEach(() => {
     vi.restoreAllMocks();
-    delete process.env.SESSION_SECRET;
   });
 
   it("guarda o JWT no cookie e mostra o nome na rota protegida", async () => {
