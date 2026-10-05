@@ -1,7 +1,6 @@
 export function getEnv() {
-  const apiUrl = process.env.API_URL;
-
-  if (!apiUrl) throw new Error("API_URL não configurada");
+  // Padrão: perfil http do backend Rank rodando localmente
+  const apiUrl = process.env.API_URL || "http://localhost:5100";
 
   return {
     API_URL: apiUrl.replace(/\/$/, ""),
