@@ -16,6 +16,10 @@ export class TarefaService {
     return result.success ? { success: true as const, tarefas: result.value } : result;
   }
 
+  static relevancias(token: string) {
+    return this.execute(() => TarefaApi.relevancias(token), "Não foi possível carregar as relevâncias.");
+  }
+
   static getById(id: number, token: string) {
     return this.execute(() => TarefaApi.getById(id, token), "Não foi possível carregar a tarefa.");
   }

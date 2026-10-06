@@ -4,5 +4,5 @@ export interface TaskColumn {
   id: keyof TarefaResponse;
   label: string;
   width: number;
-  type: "text" | "date" | "identifier" | "visibility" | "number";
+  type: "text" | "date" | "identifier" | "visibility" | "number" | "relevancia";
 }

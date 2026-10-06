@@ -19,7 +19,13 @@ export interface TarefaResponse {
   prazoInicial: string | null;
   prazoFinal: string | null;
   idResponsavel: number | null;
+  // Opcional até o backend passar a devolver o nome do responsável
+  nomeResponsavel?: string | null;
   idFase: number | null;
   idRelevancia: number;
 }
-export type TarefaPayload = Omit<TarefaResponse, 'id' | 'dataCriacao' | 'dataAtualizacao'>;
+export interface RelevanciaOption {
+  valor: number;
+  nome: string;
+}
+export type TarefaPayload = Omit<TarefaResponse, 'id' | 'dataCriacao' | 'dataAtualizacao' | 'nomeResponsavel'>;

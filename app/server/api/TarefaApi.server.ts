@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getEnv } from "@common/getEnv.server";
 import { getApiRequestConfig } from "@common/apiTls.server";
-import type { TarefaResponse, TarefaPayload } from "@types-api/Tarefa";
+import type { RelevanciaOption, TarefaResponse, TarefaPayload } from "@types-api/Tarefa";
 
 export class TarefaApi {
   private static config(token: string) {
@@ -12,6 +12,11 @@ export class TarefaApi {
     const response = await axios.get<TarefaResponse[]>(getEnv().API_URL + "/api/Tarefa", {
       ...this.config(token), params: { idColetivo },
     });
+    return response.data;
+  }
+
+  static async relevancias(token: string): Promise<RelevanciaOption[]> {
+    const response = await axios.get<RelevanciaOption[]>(getEnv().API_URL + "/api/Tarefa/relevancias", this.config(token));
     return response.data;
   }
 

@@ -11,12 +11,17 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   if (!session.isValid()) return redirect("/login");
   const idColetivo = Number(params.idColetivo);
   if (!isTarefaId(idColetivo)) return redirect("/home");
-  const result = await TarefaService.list(idColetivo, session.getToken());
+  const [result, relevanciasResult] = await Promise.all([
+    TarefaService.list(idColetivo, session.getToken()),
+    TarefaService.relevancias(session.getToken()),
+  ]);
+  // Sem as opções (ex.: endpoint ainda não existe no backend), a relevância é exibida e editada como número
+  const relevancias = relevanciasResult.success ? relevanciasResult.value : [];
   if (!result.success) {
     if (result.status === 401) return redirect("/login", { headers: { "Set-Cookie": await session.destroy() } });
-    return { tarefas: [], idColetivo, error: result.message, admin: session.isAdmin() };
+    return { tarefas: [], relevancias, idColetivo, error: result.message, admin: session.isAdmin() };
   }
-  return { tarefas: result.tarefas, idColetivo, error: null, admin: session.isAdmin() };
+  return { tarefas: result.tarefas, relevancias, idColetivo, error: null, admin: session.isAdmin() };
 }
 
 export async function action({ request, params }: Route.ActionArgs) {

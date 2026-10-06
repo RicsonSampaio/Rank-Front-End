@@ -1,13 +1,14 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router";
 import { AppLayout } from "@layouts/AppLayout";
-import type { TarefaResponse } from "@types-api/Tarefa";
+import type { RelevanciaOption, TarefaResponse } from "@types-api/Tarefa";
 import { TasksTable } from "./components/TasksTable";
 import { TaskFormDrawer } from "./components/TaskFormDrawer";
 import { TaskDeleteModal } from "./components/TaskDeleteModal";
 
 interface TasksListPageProps {
   tarefas: TarefaResponse[];
+  relevancias: RelevanciaOption[];
   idColetivo: number;
   error: string | null;
   admin: boolean;
@@ -17,7 +18,7 @@ type TaskOperation =
   | { mode: "create"; requestId: string }
   | { mode: "update" | "delete"; task: TarefaResponse; requestId: string };
 
-export function TasksListPage({ tarefas, idColetivo, error, admin }: TasksListPageProps) {
+export function TasksListPage({ tarefas, relevancias, idColetivo, error, admin }: TasksListPageProps) {
   const [operation, setOperation] = useState<TaskOperation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const close = useCallback(() => setOperation(null), []);
@@ -65,7 +66,7 @@ export function TasksListPage({ tarefas, idColetivo, error, admin }: TasksListPa
           Nenhuma tarefa disponível neste coletivo.
         </div>
       ) : (
-        <TasksTable tarefas={tarefas} onEdit={edit} onDelete={remove} />
+        <TasksTable tarefas={tarefas} relevancias={relevancias} onEdit={edit} onDelete={remove} />
       )}
       {operation && operation.mode !== "delete" && (
         <TaskFormDrawer
@@ -73,6 +74,7 @@ export function TasksListPage({ tarefas, idColetivo, error, admin }: TasksListPa
           mode={operation.mode}
           taskId={operation.mode === "update" ? operation.task.id : undefined}
           idColetivo={idColetivo}
+          relevancias={relevancias}
           requestId={operation.requestId}
           onClose={close}
           onSuccess={success}
