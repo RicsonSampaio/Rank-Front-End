@@ -20,6 +20,30 @@ export class TarefaService {
     return this.execute(() => TarefaApi.relevancias(token), "Não foi possível carregar as relevâncias.");
   }
 
+  static status(token: string) {
+    return this.execute(() => TarefaApi.status(token), "Não foi possível carregar os status.");
+  }
+
+  static listCategorias(idColetivo: number, token: string) {
+    return this.execute(() => TarefaApi.listCategorias(idColetivo, token), "Não foi possível carregar as categorias.");
+  }
+
+  static getCategoriaById(id: number, token: string) {
+    return this.execute(() => TarefaApi.getCategoriaById(id, token), "Não foi possível carregar a categoria.");
+  }
+
+  static createCategoria(idColetivo: number, nome: string, token: string) {
+    return this.execute(() => TarefaApi.createCategoria(idColetivo, nome, token), "Não foi possível criar a categoria.");
+  }
+
+  static updateCategoria(id: number, nome: string, token: string) {
+    return this.execute(() => TarefaApi.updateCategoria(id, nome, token), "Não foi possível renomear a categoria.");
+  }
+
+  static deleteCategoria(id: number, token: string) {
+    return this.execute(() => TarefaApi.deleteCategoria(id, token), "Não foi possível excluir a categoria.");
+  }
+
   static getById(id: number, token: string) {
     return this.execute(() => TarefaApi.getById(id, token), "Não foi possível carregar a tarefa.");
   }

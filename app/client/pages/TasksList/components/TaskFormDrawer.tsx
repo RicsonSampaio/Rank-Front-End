@@ -20,12 +20,19 @@ interface TaskFormDrawerProps {
 const inputClass = "mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100";
 const primaryClass = "rank-btn rank-btn-primary";
 
-// No formulário a relevância começa sem valor; o usuário precisa escolher antes de salvar
-type TaskForm = Omit<TarefaPayload, "idRelevancia"> & { idRelevancia: number | null };
+// No formulário status e relevância começam sem valor; o usuário precisa escolher antes de salvar
+type TaskForm = Omit<TarefaPayload, "idStatus" | "idRelevancia"> & { idStatus: number | null; idRelevancia: number | null };
+type OptionsField = "status" | "relevancia" | "categoria";
+
+const OPTIONS_ERROR_TITLE: Record<OptionsField, string> = {
+  status: "Não foi possível carregar os status",
+  categoria: "Não foi possível carregar as categorias",
+  relevancia: "Não foi possível carregar as relevâncias",
+};
 
 function emptyTask(idColetivo: number): TaskForm {
   return {
-    idColetivo, idEspaco: 0, idEscopo: 0, idStatus: 0, idCategoria: 0, idUsuarioCriacao: 0,
+    idColetivo, idEspaco: 0, idEscopo: 0, idStatus: null, idCategoria: 0, idUsuarioCriacao: 0,
     titulo: "", privada: false, descricao: null, lastDoneDate: null, idTarefaPai: null,
     userListMarcados: null, userListParticipantes: "", idDocumento: 0, prazoInicial: null,
     prazoFinal: null, idResponsavel: null, idFase: 0, idRelevancia: null,
@@ -33,11 +40,12 @@ function emptyTask(idColetivo: number): TaskForm {
 }
 
 function editableTask(task: TarefaResponse): TaskForm {
-  const { id: _id, dataCriacao: _created, dataAtualizacao: _updated, nomeResponsavel: _nome, ...payload } = task;
-  return payload;
+  const { id: _id, dataCriacao: _created, dataAtualizacao: _updated, nomeResponsavel: _nome, nomeStatus: _status, nomeCategoria: _categoria, ...payload } = task;
+  // Status 0 (tarefa antiga, sem status cadastrado) obriga a escolher um status válido
+  return { ...payload, idStatus: payload.idStatus || null };
 }
 
-type NumberField = "idEspaco" | "idEscopo" | "idStatus" | "idCategoria" | "idTarefaPai" | "idDocumento" | "idFase";
+type NumberField = "idEspaco" | "idEscopo" | "idTarefaPai" | "idDocumento" | "idFase";
 type DateField = "prazoInicial" | "prazoFinal" | "lastDoneDate";
 
 export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestId, onClose, onSuccess }: TaskFormDrawerProps) {
@@ -45,9 +53,13 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestI
   const detail = useFetcher<typeof detailLoader>();
   const [payload, setPayload] = useState<TaskForm | null>(() => mode === "create" ? emptyTask(idColetivo) : null);
   const [nomeResponsavelAtual, setNomeResponsavelAtual] = useState<string | null>(null);
-  const [relevanciaError, setRelevanciaError] = useState<string | null>(null);
-  const [relevanciaObrigatoria, setRelevanciaObrigatoria] = useState(false);
-  const showRelevanciaError = useCallback((message: string) => setRelevanciaError(message), []);
+  const [nomeStatusAtual, setNomeStatusAtual] = useState<string | null>(null);
+  const [nomeCategoriaAtual, setNomeCategoriaAtual] = useState<string | null>(null);
+  const [optionsError, setOptionsError] = useState<{ field: OptionsField; message: string } | null>(null);
+  const [faltando, setFaltando] = useState<Record<OptionsField, boolean>>({ status: false, relevancia: false });
+  const showStatusError = useCallback((message: string) => setOptionsError({ field: "status", message }), []);
+  const showCategoriaError = useCallback((message: string) => setOptionsError({ field: "categoria", message }), []);
+  const showRelevanciaError = useCallback((message: string) => setOptionsError({ field: "relevancia", message }), []);
   const initialized = useRef(false);
   const completed = useRef(false);
   const busy = fetcher.state !== "idle";
@@ -64,6 +76,8 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestI
       initialized.current = true;
       setPayload(editableTask(detail.data.tarefa));
       setNomeResponsavelAtual(detail.data.tarefa.nomeResponsavel ?? null);
+      setNomeStatusAtual(detail.data.tarefa.nomeStatus ?? null);
+      setNomeCategoriaAtual(detail.data.tarefa.nomeCategoria ?? null);
     }
   }, [detail.data]);
 
@@ -121,9 +135,10 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestI
           <fetcher.Form
             method="post" action={"/" + idColetivo + "/Tasks/List"} className="flex min-h-0 flex-1 flex-col"
             onSubmit={(event) => {
-              if (payload.idRelevancia === null) {
+              const missing = { status: payload.idStatus === null, relevancia: payload.idRelevancia === null };
+              if (missing.status || missing.relevancia) {
                 event.preventDefault();
-                setRelevanciaObrigatoria(true);
+                setFaltando(missing);
               }
             }}
           >
@@ -149,8 +164,31 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestI
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {dateField("prazoInicial", "Prazo inicial")}
                   {dateField("prazoFinal", "Prazo final")}
-                  {numberField("idStatus", "ID do status")}
-                  {numberField("idCategoria", "ID da categoria")}
+                  <div className="block text-sm font-medium text-gray-700">
+                    <span id="task-status-label">Status</span>
+                    <LazySelect
+                      labelId="task-status-label" url="/api/tarefas/status" inputClass={inputClass}
+                      value={payload.idStatus} currentLabel={nomeStatusAtual ?? "Status #" + payload.idStatus}
+                      placeholder="Selecione o status"
+                      onChange={(idStatus) => {
+                        setFaltando((current) => ({ ...current, status: false }));
+                        setPayload({ ...payload, idStatus });
+                      }}
+                      onError={showStatusError}
+                    />
+                    {faltando.status && <span role="alert" className="mt-1 block text-xs font-normal text-red-700">Escolha o status da tarefa.</span>}
+                  </div>
+                  <div className="block text-sm font-medium text-gray-700">
+                    <span id="task-categoria-label">Categoria</span>
+                    {/* Categoria é opcional: "Nenhuma" envia idCategoria 0 */}
+                    <LazySelect
+                      labelId="task-categoria-label" url={"/api/coletivos/" + idColetivo + "/categorias"} inputClass={inputClass}
+                      value={payload.idCategoria || null} currentLabel={nomeCategoriaAtual ?? "Categoria #" + payload.idCategoria}
+                      placeholder="Nenhuma" noneLabel="Nenhuma"
+                      onChange={(idCategoria) => setPayload({ ...payload, idCategoria: idCategoria ?? 0 })}
+                      onError={showCategoriaError}
+                    />
+                  </div>
                   <div className="block text-sm font-medium text-gray-700">
                     <span id="task-responsavel-label">Responsável</span>
                     <LazySelect
@@ -166,12 +204,12 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestI
                       labelId="task-relevancia-label" url="/api/tarefas/relevancias" inputClass={inputClass}
                       value={payload.idRelevancia} currentLabel={relevanciaAtual} placeholder="Selecione a relevância"
                       onChange={(idRelevancia) => {
-                        setRelevanciaObrigatoria(false);
+                        setFaltando((current) => ({ ...current, relevancia: false }));
                         setPayload({ ...payload, idRelevancia });
                       }}
                       onError={showRelevanciaError}
                     />
-                    {relevanciaObrigatoria && <span role="alert" className="mt-1 block text-xs font-normal text-red-700">Escolha a relevância da tarefa.</span>}
+                    {faltando.relevancia &&<span role="alert" className="mt-1 block text-xs font-normal text-red-700">Escolha a relevância da tarefa.</span>}
                   </div>
                 </div>
                 <details className="rounded border border-gray-200 p-4">
@@ -205,11 +243,11 @@ export function TaskFormDrawer({ mode, taskId, idColetivo, relevancias, requestI
         )}
       </Drawer>
       {/* Fora do Drawer para o Esc do modal não fechar o drawer junto; abre por cima por ser aberto depois */}
-      {relevanciaError && (
-        <RecordModal title="Não foi possível carregar as relevâncias" busy={false} onClose={() => setRelevanciaError(null)}>
-          <p role="alert" className="mb-5 text-gray-700">{relevanciaError}</p>
+      {optionsError && (
+        <RecordModal title={OPTIONS_ERROR_TITLE[optionsError.field]} busy={false} onClose={() => setOptionsError(null)}>
+          <p role="alert" className="mb-5 text-gray-700">{optionsError.message}</p>
           <div className="flex justify-end">
-            <button type="button" autoFocus className={primaryClass} onClick={() => setRelevanciaError(null)}>Entendi</button>
+            <button type="button" autoFocus className={primaryClass} onClick={() => setOptionsError(null)}>Entendi</button>
           </div>
         </RecordModal>
       )}

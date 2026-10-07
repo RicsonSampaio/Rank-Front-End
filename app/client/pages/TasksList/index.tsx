@@ -5,6 +5,8 @@ import type { RelevanciaOption, TarefaResponse } from "@types-api/Tarefa";
 import { TasksTable } from "./components/TasksTable";
 import { TaskFormDrawer } from "./components/TaskFormDrawer";
 import { TaskDeleteModal } from "./components/TaskDeleteModal";
+import { TaskCategoriesModal } from "./components/TaskCategoriesModal";
+import { ActionMenu } from "@components/ActionMenu";
 
 interface TasksListPageProps {
   tarefas: TarefaResponse[];
@@ -21,6 +23,7 @@ type TaskOperation =
 export function TasksListPage({ tarefas, relevancias, idColetivo, error, admin }: TasksListPageProps) {
   const [operation, setOperation] = useState<TaskOperation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const close = useCallback(() => setOperation(null), []);
   const success = useCallback((text: string) => {
     setOperation(null);
@@ -46,17 +49,24 @@ export function TasksListPage({ tarefas, relevancias, idColetivo, error, admin }
           <h1 className="text-2xl font-semibold">Tarefas</h1>
           {!error && <p className="text-sm text-gray-500">{tarefas.length} {tarefas.length === 1 ? "tarefa" : "tarefas"}</p>}
         </div>
-        <button
-          type="button"
-          className="rank-btn rank-btn-primary"
-          onClick={() => {
-            setMessage(null);
-            setOperation({ mode: "create", requestId: crypto.randomUUID() });
-          }}
-        >
-          <span aria-hidden="true" className="text-lg leading-none">+</span>
-          Criar tarefa
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="rank-btn rank-btn-primary"
+            onClick={() => {
+              setMessage(null);
+              setOperation({ mode: "create", requestId: crypto.randomUUID() });
+            }}
+          >
+            <span aria-hidden="true" className="text-lg leading-none">+</span>
+            Criar tarefa
+          </button>
+          {/* Opções da lista de tarefas; novas opções entram neste menu */}
+          <ActionMenu
+            label="da lista de tarefas" orientation="vertical" width={200} buttonClassName="rank-icon-action p-2"
+            items={[{ label: "Gerenciar categorias", onSelect: () => { setMessage(null); setCategoriesOpen(true); } }]}
+          />
+        </div>
       </div>
       {message && <p role="status" className="mb-4 rounded border border-green-200 bg-green-50 p-3 text-sm text-green-800">{message}</p>}
       {error ? (
@@ -80,6 +90,7 @@ export function TasksListPage({ tarefas, relevancias, idColetivo, error, admin }
           onSuccess={success}
         />
       )}
+      {categoriesOpen && <TaskCategoriesModal idColetivo={idColetivo} onClose={() => setCategoriesOpen(false)} />}
       {operation?.mode === "delete" && (
         <TaskDeleteModal key={operation.requestId} task={operation.task} idColetivo={idColetivo} requestId={operation.requestId} onClose={close} onSuccess={success} />
       )}

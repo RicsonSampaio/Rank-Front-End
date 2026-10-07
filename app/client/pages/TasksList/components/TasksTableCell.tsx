@@ -10,8 +10,8 @@ interface TasksTableCellProps {
 
 function formatValue(task: TarefaResponse, relevancias: RelevanciaOption[], column: TaskColumn) {
   const value = task[column.id];
-  // Sem nome (backend antigo ou usuário inexistente): mostra o ID do responsável
-  if (column.id === "nomeResponsavel" && !value && task.idResponsavel) return "#" + String(task.idResponsavel);
+  // Sem nome (backend antigo ou registro inexistente): mostra o ID correspondente
+  if (!value && column.fallbackId && task[column.fallbackId]) return "#" + String(task[column.fallbackId]);
   if (value === null || value === undefined || value === "") return "—";
   if (column.type === "visibility") return value ? "Privada" : "Pública";
   if (column.type === "identifier") return "#" + String(value);

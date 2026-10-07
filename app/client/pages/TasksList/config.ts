@@ -3,9 +3,9 @@ import type { TaskColumn } from "@types-client/pages/TasksList";
 export const BASE_COLUMNS: TaskColumn[] = [
   { id: "id", label: "ID", width: 80, type: "identifier" },
   { id: "titulo", label: "Título", width: 352, type: "text" },
-  { id: "idStatus", label: "Status (ID)", width: 120, type: "identifier" },
-  { id: "idCategoria", label: "Categoria (ID)", width: 140, type: "identifier" },
-  { id: "nomeResponsavel", label: "Responsável", width: 180, type: "text" },
+  { id: "nomeStatus", label: "Status", width: 140, type: "text", fallbackId: "idStatus" },
+  { id: "nomeCategoria", label: "Categoria", width: 160, type: "text", fallbackId: "idCategoria" },
+  { id: "nomeResponsavel", label: "Responsável", width: 180, type: "text", fallbackId: "idResponsavel" },
   { id: "prazoInicial", label: "Data inicial", width: 140, type: "date" },
   { id: "prazoFinal", label: "Data final", width: 140, type: "date" },
   { id: "idRelevancia", label: "Relevância", width: 120, type: "relevancia" },
